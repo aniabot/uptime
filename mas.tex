@@ -1,0 +1,135 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+
+\title{Cluster Uptime Given Node Uptime}
+
+\author{
+  Masud Rahman\\
+  \and Typesetting: ania\\
+}
+\date{}							% Activate to display a given date or no date
+
+
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+
+\begin{document}
+\maketitle
+
+\section{Derivation}
+\begin{defn}
+The probability of a node being up is $p$.
+\end{defn}
+
+\noindent This probability is traditionally denoted as percentage uptime. For example, an uptime of 99\% corresponds to $p=.99$. 
+
+\begin{cor}
+The probability of $k$ nodes being up is 
+$$P(k,n,p) = \frac{n!}{k!(n-k)!}p^k(1-p)^{n-k}$$
+\end{cor}
+
+\noindent This is due to the binomial theorem.
+
+\begin{cor} 
+The probability of $k$ or more nodes being up is 
+$$\sum_{k}^{n} P(k,n,p) $$
+\end{cor}
+
+\begin{cor}
+The probability of $\frac{n}{2} - 1$ or more nodes being up is 
+$$ U_n(p) = \sum_{k = \frac{n}{2} - 1 }^{n} P(k,n,p) $$
+\end{cor}
+
+\section{Examples}
+\subsection{n = 4, p = 0.9}
+Given a cluster of four nodes, each with uptime 90\%, \textbf{Corollary 3} determines a cluster uptime of $$U_4(0.9) = 0.9999 = 99.99\%$$
+The following reasoning justifies this.
+
+\begin{enumerate}
+\item The probability of one node being down is 0.1.
+\item The probability of all four nodes being down is $0.1^4 = 0.0001$.
+\item The probability of at least one node being up is $1 - 0.1^4 = 0.9999 = 99\%$.
+\end{enumerate}
+
+\subsection{p = 0.8, U = 0.999999}
+Given a node uptime of 80\%, how many nodes does our cluster need to have 99.9999\% uptime?
+Empirically, we need a cluster of 42 nodes.
+\newline\newline
+\noindent For a cluster of size of size 40, we need to calculate the uptime of 19 or more nodes. 
+
+\begin{center}
+\begin{tabular}{| l | l |}
+\hline 
+k & P(k, 40, 0.8) \\
+\hline
+19 & 3.9677673294e-06 \\
+20 & 1.66646227835e-05 \\
+21 & 6.34842772704e-05 \\
+22 & 0.000219309321479 \\
+23 & 0.00068653352811 \\
+24 & 0.00194517832964 \\
+25 & 0.00497965652389 \\
+26 & 0.0114915150551 \\
+27 & 0.0238342534477 \\
+28 & 0.0442636135457 \\
+29 & 0.0732639120756 \\
+30 & 0.107453737711 \\
+31 & 0.138649984143 \\
+32 & 0.155981232161 \\
+33 & 0.151254528156 \\
+34 & 0.124562552599 \\
+35 & 0.0854143217823 \\
+36 & 0.0474524009901 \\
+37 & 0.0205199571849 \\
+38 & 0.00647998647945 \\
+39 & 0.00132922799578 \\
+40 & 0.000132922799578 \\
+\hline
+$\sum$ & 0.999998940497 \\ 
+\hline
+\end{tabular}
+\end{center}
+
+\noindent This is just short of our desired 0.99999 uptime. For a cluster of 42 nodes, we need to calculate the uptime of 20 or more nodes.
+
+\begin{center}
+\begin{tabular}{| l | l |}
+\hline 
+k & P(k, 42, 0.8) \\
+\hline
+20 & 2.48454376045e-06 \\
+21 & 1.04114214723e-05 \\
+22 & 3.97527001671e-05 \\
+23 & 0.000138270261451 \\
+24 & 0.000437855827928 \\
+25 & 0.00126102478443 \\
+26 & 0.00329806482082 \\
+27 & 0.00781763513084 \\
+28 & 0.0167520752804 \\
+29 & 0.0323488350242 \\
+30 & 0.0560713140419 \\
+31 & 0.0868200991616 \\
+32 & 0.119377636347 \\
+33 & 0.144700165269 \\
+34 & 0.153211939697 \\
+35 & 0.140079487723 \\
+36 & 0.108950712673 \\
+37 & 0.0706707325449 \\
+38 & 0.0371951223921 \\
+39 & 0.0152595373916 \\
+40 & 0.00457786121748 \\
+41 & 0.000893241213167 \\
+42 & 8.50705917302e-05 \\
+\hline
+$\sum$ & 0.99999933006 \\ 
+\hline
+\end{tabular}
+\end{center}
+This is our desired uptime, bitches.
+\end{document}  
